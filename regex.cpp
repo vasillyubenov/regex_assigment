@@ -2,7 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+int Size(const std::string Line)
+{
+  int counter=0;
+  while(Line[counter]!='\0'){
+    counter++;
+  }
+  return counter;
+}
 int main(){
   std::fstream MyFile;
   std::string Regex, Line, FileName;
