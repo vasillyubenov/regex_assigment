@@ -111,15 +111,43 @@ bool basic_search(const std::string Line, const std::string Regex){
   }
   return false;
 }
+bool defense(std::string Regex) {
+	if (Size(Regex) == 0)
+		return false;
+	if (Regex[0] == '\+' || Regex[0] == '\*' || Regex[0] == '\?' || Regex=="\\")
+		return false;
+	if (Regex[Size(Regex) - 1] == '\\')
+		return false;
+	int special = 0;
+	for (int i = 1; i < Size(Regex); i++)
+	{
+		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?') && Regex[i - 1] != '\\') {
+			special++;
+		}
+	}
+	if (special >= 2)
+		return false;
+	//if there are two or more consecutive multipliers
+	for(int i = 1; i < Size(Regex); i++) {
+		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?' || Regex[i] == '\.') && Regex[i - 1] != '\\') {
+			if (Regex[i + 1] == '\*' || Regex[i + 1] == '\+' || Regex[i + 1] == '\?' || Regex[i + 1] == '\.')
+				return false;
+		}
+	}
+	return true;
+}
 int main(){
   std::fstream MyFile;
   std::string Regex, Line, FileName;
   char letter, multiplier;
   int special_pos = 0;
+  std::cout << "The regular expression you want to find is: ";
+  do {
+      std::getline(std::cin,Regex);
+  }
+  while(defense!=true);
   std::cout << "The File you want to read from is: ";
   std::cin >> FileName;
-  std::cout << "The regular expression you want to find is: ";
-  std::cin >> Regex;
   MyFile.open(FileName,std::fstream::in);
   if (!MyFile.good()) {
     std::cout << "File could not open properly!";
