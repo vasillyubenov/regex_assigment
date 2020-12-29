@@ -130,57 +130,67 @@ int main(){
   {
       while (getline(MyFile, Line))
 	  {
-		  if (basic_search(Line, Regex) == true) std::cout << Line<<"\n";
+          if (Min_regex_Size(Regex)<=Size(Line) && basic_search(Line, Regex) == true)
+		        std::cout << Line<<"\n";
 	  }
   }
   else {
       letter = Regex[special_pos - 1];
+	  //eraseing the special symbol and the one whose amouth varies and the one before if if it is an escpaed symbol
+	  if (letter == '\\' || letter == '\?' || letter == '\+' || letter == '\*' || letter == '\.' || letter == '\^') {
+		  Regex.erase(special_pos - 1, 3);
+	  }
 	  //eraseing the special symbol and the one whose amouth varies
-      Regex.erase(special_pos - 1, 2);
+	  else {
+		  Regex.erase(special_pos - 1, 2);
+	  }
 	  std::string buffer, tmp_Regex;
       while (getline(MyFile, Line)) {
 	      tmp_Regex = Regex;
 		  buffer = "";
-	      switch (multiplier) {
-	          case '\?': {
-                  int max = 1;
-	              if (Max_Amounth(Line, letter) >= 1) max = 2;//the times we want the loop to be done
-                  for (int quantity = 0; quantity < max; quantity++) {
-                      tmp_Regex.insert(special_pos - 1, buffer);
-                      if (basic_search(Line, tmp_Regex) == true) {
-			              std::cout << Line<<"\n";
-				          break;
-				      }
-				      buffer += letter;
-			      }
-			      break;
-		      }
-		      case '\*': {
-		          int max = Max_Amounth(Line, letter);
-			      for (int quantity = 0; quantity <= max; quantity++) {
-	                  tmp_Regex.insert(special_pos - 1, buffer);
-			          if (basic_search(Line, tmp_Regex) == true) {
-			              std::cout << Line << "\n";
-				          break;
-			          }
-		              buffer += letter;
-			      }
-			      break;
-		     }
-		      case '\+': {
-                  buffer += letter;
-    		      int max = Max_Amounth(Line, letter);
-			      for (int quantity = 1; quantity <= max; quantity++) {
-				      tmp_Regex.insert(special_pos - 1, buffer);
-				      if (basic_search(Line, tmp_Regex) == true) {
-				          std::cout << Line << "\n";
-					      break;
-				      }
-				      buffer += letter;
-		          }
-			      break;
-			  }
-		  }
+          if (Min_regex_Size(tmp_Regex) <= Size(Line)) {
+              switch (multiplier) {
+    	          case '\?': {
+                      int max = 1;
+    	              if (Max_Amounth(Line, letter) >= 1) max = 2;//the times we want the loop to be done
+                      for (int quantity = 0; quantity < max; quantity++) {
+                          tmp_Regex.insert(special_pos - 1, buffer);
+                          if (basic_search(Line, tmp_Regex) == true) {
+    			              std::cout << Line<<"\n";
+    				          break;
+    				      }
+    				      buffer += letter;
+    			      }
+    			      break;
+    		      }
+    		      case '\*': {
+    		          int max = Max_Amounth(Line, letter);
+    			      for (int quantity = 0; quantity <= max; quantity++) {
+    	                  tmp_Regex.insert(special_pos - 1, buffer);
+    			          if (basic_search(Line, tmp_Regex) == true) {
+    			              std::cout << Line << "\n";
+    				          break;
+    			          }
+    		              buffer += letter;
+    			      }
+    			      break;
+    		     }
+    		      case '\+': {
+                      buffer += letter;
+        		      int max = Max_Amounth(Line, letter);
+    			      for (int quantity = 1; quantity <= max; quantity++) {
+    				      tmp_Regex.insert(special_pos - 1, buffer);
+    				      if (basic_search(Line, tmp_Regex) == true) {
+    				          std::cout << Line << "\n";
+    					      break;
+    				      }
+    				      buffer += letter;
+    		          }
+    			      break;
+    			  }
+
+              }
+	      }
 	  }
   }
   return 0;
