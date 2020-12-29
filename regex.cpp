@@ -54,14 +54,17 @@ bool basic_search(const std::string Line, const std::string Regex){
                       return false;
                   }
                   char next = Regex[curr_reg + 1];
-                  if (next!='\\' && next !='\+' && next != '\*' && next != '\?' && next !='\^' && next!='\.') {
+                  if (next != '\\' && next != '\+' && next != '\*' && next != '\?' && next != '\^' && next != '\.') {
                       //std::cout<<"Missuese of the \'\\\' symbol!"
                       return false;
                   }
-                  if (next==Line[curr_line]) {
+                  if (next == Line[curr_line]) {
                       match = true;
                       curr_line++;
                       curr_reg++;
+                  }
+                  else if (start_line==true) {
+                      return false;
                   }
                   else {
                       match = false;
@@ -70,10 +73,15 @@ bool basic_search(const std::string Line, const std::string Regex){
               break;
             }
             case '\^': {
-                if (curr_reg!=0) {
+                if (curr_reg != 0) {
                     return false;
                 }
+                start_line=true;
+                if (Regex=="^") {
+                    return true;
+                }
                 match = true;
+                break;
             }
             case '\.': {
                 if (curr_reg > Size(Line) - 1) {
@@ -89,6 +97,9 @@ bool basic_search(const std::string Line, const std::string Regex){
                     match = true;
                 }
                 else {
+                    if (start_line==true) {
+                        return false;
+                    }
                     match = false;
                     break;
                 }
@@ -96,7 +107,7 @@ bool basic_search(const std::string Line, const std::string Regex){
         }
         if (match == true && curr_reg == Size(Regex) - 1) return true;
         if (match == false) break;
-     }   
+     }
   }
   return false;
 }
