@@ -20,12 +20,27 @@ int Min_regex_Size(const std::string Regex) {
 //seach through the Regex if the is one of the special symbols like (?,* and +)
 int Special_Symbol (const std::string Regex, char &special) {
   for(int i=1;i<Size(Regex);i++) {
-    if(Regex[i]=='\*' || Regex[i]=='\?' || Regex[i]=='\+' && Regex[i-1]!='\\') {
-      special=Regex[i];
-      return i;
+    if(Regex[i] == '\*' || Regex[i] == '\?' || Regex[i] == '\+') {
+      if (Regex[i-1] != '\\') {
+        special=Regex[i];
+        return i;
+      }
     }
   }
   return 0;
+}
+//after we know what the multiplying symbol is we want to find what is the maximus amounth of times we have it in the line
+int Max_Amounth(const std::string Line, const char letter) {
+  int max=0, tmp;
+  for(int i=0;i<Size(Line);i++) {
+    tmp=0;
+    for(int j=i;j<Size(Line);j++) {
+      if (Line[j]==letter) tmp++;
+      else break;
+    }
+    if(tmp>max) max=tmp;
+  }
+  return max;
 }
 bool basic_search(const std::string Line, const std::string Regex){
   bool match = false;
