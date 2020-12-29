@@ -17,6 +17,16 @@ int Min_regex_Size(const std::string Regex) {
 	}
 	return Size(Regex) - counter;
 }
+//seach through the Regex if the is one of the special symbols like (?,* and +)
+int Special_Symbol (const std::string Regex, char &special) {
+  for(int i=1;i<Size(Regex);i++) {
+    if(Regex[i]=='\*' || Regex[i]=='\?' || Regex[i]=='\+' && Regex[i-1]!='\\') {
+      special=Regex[i];
+      return i;
+    }
+  }
+  return 0;
+}
 bool basic_search(const std::string Line, const std::string Regex){
   bool match = false;
   for (size_t line_pos = 0; line_pos <= Size(Line) - Min_regex_Size(Regex); line_pos++) {
@@ -93,7 +103,7 @@ int main(){
   }
   while(getline(MyFile,Line))
   {
-    if(basic_search(Line, Regex)==true) std::cout<<Line;
+    if(basic_search(Line, Regex)==true) std::cout<<Line<<"\n";
   }
   return 0;
 }
