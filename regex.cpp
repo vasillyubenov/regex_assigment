@@ -4,7 +4,7 @@
 int Size(const std::string Line)
 {
   int counter=0;
-  while(Line[counter]!='\0'){
+  while(Line[counter] != '\0'){
     counter++;
   }
   return counter;
@@ -42,14 +42,14 @@ int Max_Amounth(const std::string Line, const char letter) {
   return max;
 }
 bool basic_search(const std::string Line, const std::string Regex){
-  bool match = false, start_line=false;
+  bool match = false, start_line = false;
   for (size_t line_pos = 0; line_pos <= Size(Line) - Min_regex_Size(Regex); line_pos++) {
       int curr_line = line_pos;
       match = false;
       for (size_t curr_reg = 0; curr_reg < Min_regex_Size(Regex); curr_reg++) {
-          switch(Regex[curr_reg]){
+          switch (Regex[curr_reg]){
               case '\\': {
-                  if(curr_reg == Size(Regex) - 1 ) {
+                  if (curr_reg == Size(Regex) - 1 ) {
                       //std::cout<<"Missuese of the \'\\\' symbol!"
                       return false;
                   }
@@ -63,7 +63,7 @@ bool basic_search(const std::string Line, const std::string Regex){
                       curr_line++;
                       curr_reg++;
                   }
-                  else if (start_line==true) {
+                  else if (start_line == true) {
                       return false;
                   }
                   else {
@@ -77,7 +77,7 @@ bool basic_search(const std::string Line, const std::string Regex){
                     return false;
                 }
                 start_line=true;
-                if (Regex=="^") {
+                if (Regex == "^") {
                     return true;
                 }
                 match = true;
@@ -92,12 +92,12 @@ bool basic_search(const std::string Line, const std::string Regex){
                 break;
             }
             default : {
-                if (Regex[curr_reg]==Line[curr_line]){
+                if (Regex[curr_reg] == Line[curr_line]){
                     curr_line++;
                     match = true;
                 }
                 else {
-                    if (start_line==true) {
+                    if (start_line == true) {
                         return false;
                     }
                     match = false;
@@ -145,7 +145,7 @@ int main(){
   do {
       std::getline(std::cin,Regex);
   }
-  while(defense!=true);
+  while (defense(Regex) != true);
   std::cout << "The File you want to read from is: ";
   std::cin >> FileName;
   MyFile.open(FileName,std::fstream::in);
@@ -153,13 +153,13 @@ int main(){
     std::cout << "File could not open properly!";
     return -1;
   }
-  special_pos = Special_Symbol(Regex,multiplier);
+  special_pos = Special_Symbol(Regex, multiplier);
   if (special_pos == 0)//there is no special symbol
   {
       while (getline(MyFile, Line))
 	  {
-          if (Min_regex_Size(Regex)<=Size(Line) && basic_search(Line, Regex) == true)
-		        std::cout << Line<<"\n";
+          if (Min_regex_Size(Regex) <= Size(Line) && basic_search(Line, Regex) == true)
+		        std::cout << Line << "\n";
 	  }
   }
   else {
@@ -216,7 +216,6 @@ int main(){
     		          }
     			      break;
     			  }
-
               }
 	      }
 	  }
