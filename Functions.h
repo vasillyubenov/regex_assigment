@@ -14,4 +14,6 @@ int Max_Amounth(const std::string Line, const char letter);
 
 bool basic_search(const std::string Line, const std::string Regex);
 
-bool defense(std::string Regex);
+bool defense(const std::string Regex);
+
+void Solution(std::string Regex, const std::string FileName);
