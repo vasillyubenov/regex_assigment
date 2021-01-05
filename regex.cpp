@@ -10,7 +10,7 @@ int main() {
   int special_pos = 0;
   std::cout << "The regular expression you want to find is: ";
   do {
-      std::getline(std::cin,Regex);
+      std::getline(std::cin, Regex);
   }
   while (defense(Regex) != true);
   std::cout << "The File you want to read from is: ";
