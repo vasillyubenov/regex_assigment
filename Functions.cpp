@@ -124,7 +124,7 @@ bool basic_search(const std::string Line, const std::string Regex) {
 	return false;
 }
 
-bool defense(std::string Regex) {
+bool defense(const std::string Regex) {
 	if (Size(Regex) == 0) {
 		return false;
 	}	
