@@ -3,7 +3,7 @@
 #include <fstream>
 #include "Functions.h"
 
-int Size(const std::string Line)
+int Size(const std::string &Line)
 {
 	int counter = 0;
 	while (Line[counter] != '\0') {
@@ -12,7 +12,7 @@ int Size(const std::string Line)
 	return counter;
 }
 
-int Min_regex_Size(const std::string Regex) {
+int Min_regex_Size(const std::string &Regex) {
 	int counter = 0;
 	for (int i = 0; i < Size(Regex); i++) {
 		if (Regex[i] == '\\') counter++;
@@ -21,7 +21,7 @@ int Min_regex_Size(const std::string Regex) {
 }
 
 //seach through the Regex if the is one of the special symbols like (?,* or +)
-int Special_Symbol(const std::string Regex, char &special) {
+int Special_Symbol(const std::string &Regex, char &special) {
 	for (int i = 1; i < Size(Regex); i++) {
 		if (Regex[i] == '*' || Regex[i] == '\?' || Regex[i] == '+') {
 			if (Regex[i - 1] != '\\') {
@@ -34,7 +34,7 @@ int Special_Symbol(const std::string Regex, char &special) {
 }
 
 //after we know what the multiplying symbol is we want to find what is the maximum amounth of times we have it in the line
-int Max_Amounth(const std::string Line, const char letter) {
+int Max_Amounth(const std::string &Line, const char letter) {
 	int max = 0, tmp;
 	for (int i = 0; i < Size(Line); i++) {
 		tmp = 0;
@@ -47,7 +47,7 @@ int Max_Amounth(const std::string Line, const char letter) {
 	return max;
 }
 
-bool basic_search(const std::string Line, const std::string Regex) {
+bool basic_search(const std::string &Line, const std::string &Regex) {
 	bool match = false, start_line = false;
 	for (size_t line_pos = 0; line_pos <= Size(Line) - Min_regex_Size(Regex); line_pos++) {
 		int curr_line = line_pos;
@@ -124,7 +124,7 @@ bool basic_search(const std::string Line, const std::string Regex) {
 	return false;
 }
 
-bool defense(const std::string Regex) {
+bool defense(const std::string &Regex) {
 	if (Size(Regex) == 0) {
 		return false;
 	}	
@@ -154,7 +154,7 @@ bool defense(const std::string Regex) {
 
 	return true;
 }
-void Solution(std::string Regex, const std::string FileName) {
+void Solution(std::string Regex, const std::string &FileName) {
 	std::fstream MyFile;
 	std::string Line;
 	char letter, multiplier;
@@ -236,4 +236,5 @@ void Solution(std::string Regex, const std::string FileName) {
 			}
 		}
 	}
+	MyFile.close();
 }
