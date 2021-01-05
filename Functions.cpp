@@ -20,7 +20,7 @@ int Min_regex_Size(const std::string Regex) {
 	return Size(Regex) - counter;
 }
 
-//seach through the Regex if the is one of the special symbols like (?,* and +)
+//seach through the Regex if the is one of the special symbols like (?,* or +)
 int Special_Symbol(const std::string Regex, char &special) {
 	for (int i = 1; i < Size(Regex); i++) {
 		if (Regex[i] == '\*' || Regex[i] == '\?' || Regex[i] == '\+') {
@@ -33,7 +33,7 @@ int Special_Symbol(const std::string Regex, char &special) {
 	return 0;
 }
 
-//after we know what the multiplying symbol is we want to find what is the maximus amounth of times we have it in the line
+//after we know what the multiplying symbol is we want to find what is the maximum amounth of times we have it in the line
 int Max_Amounth(const std::string Line, const char letter) {
 	int max = 0, tmp;
 	for (int i = 0; i < Size(Line); i++) {
@@ -82,7 +82,9 @@ bool basic_search(const std::string Line, const std::string Regex) {
 					if (curr_reg != 0) {
 						return false;
 					}
+
 					start_line = true;
+
 					if (Regex == "^") {
 						return true;
 					}
@@ -123,26 +125,30 @@ bool basic_search(const std::string Line, const std::string Regex) {
 }
 
 bool defense(std::string Regex) {
-	if (Size(Regex) == 0)
+	if (Size(Regex) == 0) {
 		return false;
-	if (Regex[0] == '\+' || Regex[0] == '\*' || Regex[0] == '\?' || Regex == "\\")
+	}	
+	if (Regex[0] == '\+' || Regex[0] == '\*' || Regex[0] == '\?' || Regex == "\\") {
 		return false;
-	if (Regex[Size(Regex) - 1] == '\\')
+	}
+	if (Regex[Size(Regex) - 1] == '\\') {
 		return false;
+	}	
 	int special = 0;
-	for (int i = 1; i < Size(Regex); i++)
-	{
+	for (int i = 1; i < Size(Regex); i++) {
 		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?') && Regex[i - 1] != '\\') {
 			special++;
 		}
 	}
-	if (special >= 2)
+	if (special >= 2) {
 		return false;
+	}
 	//if there are two or more consecutive multipliers
 	for (int i = 1; i < Size(Regex); i++) {
 		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?' || Regex[i] == '\.') && Regex[i - 1] != '\\') {
-			if (Regex[i + 1] == '\*' || Regex[i + 1] == '\+' || Regex[i + 1] == '\?' || Regex[i + 1] == '\.')
+			if (Regex[i + 1] == '\*' || Regex[i + 1] == '\+' || Regex[i + 1] == '\?' || Regex[i + 1] == '\.') {
 				return false;
+			}		
 		}
 	}
 
