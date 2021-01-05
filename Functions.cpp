@@ -23,7 +23,7 @@ int Min_regex_Size(const std::string Regex) {
 //seach through the Regex if the is one of the special symbols like (?,* or +)
 int Special_Symbol(const std::string Regex, char &special) {
 	for (int i = 1; i < Size(Regex); i++) {
-		if (Regex[i] == '\*' || Regex[i] == '\?' || Regex[i] == '\+') {
+		if (Regex[i] == '*' || Regex[i] == '\?' || Regex[i] == '+') {
 			if (Regex[i - 1] != '\\') {
 				special = Regex[i];
 				return i;
@@ -60,7 +60,7 @@ bool basic_search(const std::string Line, const std::string Regex) {
 						return false;
 					}
 					char next = Regex[curr_reg + 1];
-					if (next != '\\' && next != '\+' && next != '\*' && next != '\?' && next != '\^' && next != '\.') {
+					if (next != '\\' && next != '+' && next != '*' && next != '\?' && next != '^' && next != '.') {
 						//std::cout<<"Missuese of the \'\\\' symbol!"
 						return false;
 					}
@@ -78,7 +78,7 @@ bool basic_search(const std::string Line, const std::string Regex) {
 					}
 					break;
 				}
-				case '\^': {
+				case '^': {
 					if (curr_reg != 0) {
 						return false;
 					}
@@ -91,7 +91,7 @@ bool basic_search(const std::string Line, const std::string Regex) {
 					match = true;
 					break;
 				}
-				case '\.': {
+				case '.': {
 					if (curr_reg > Size(Line) - 1) {
 						break;
 					}
@@ -128,7 +128,7 @@ bool defense(std::string Regex) {
 	if (Size(Regex) == 0) {
 		return false;
 	}	
-	if (Regex[0] == '\+' || Regex[0] == '\*' || Regex[0] == '\?' || Regex == "\\") {
+	if (Regex[0] == '+' || Regex[0] == '*' || Regex[0] == '\?' || Regex == "\\") {
 		return false;
 	}
 	if (Regex[Size(Regex) - 1] == '\\') {
@@ -136,7 +136,7 @@ bool defense(std::string Regex) {
 	}	
 	int special = 0;
 	for (int i = 1; i < Size(Regex); i++) {
-		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?') && Regex[i - 1] != '\\') {
+		if ((Regex[i] == '*' || Regex[i] == '+' || Regex[i] == '\?') && Regex[i - 1] != '\\') {
 			special++;
 		}
 	}
@@ -145,8 +145,8 @@ bool defense(std::string Regex) {
 	}
 	//if there are two or more consecutive multipliers
 	for (int i = 1; i < Size(Regex); i++) {
-		if ((Regex[i] == '\*' || Regex[i] == '\+' || Regex[i] == '\?' || Regex[i] == '\.') && Regex[i - 1] != '\\') {
-			if (Regex[i + 1] == '\*' || Regex[i + 1] == '\+' || Regex[i + 1] == '\?' || Regex[i + 1] == '\.') {
+		if ((Regex[i] == '*' || Regex[i] == '+' || Regex[i] == '\?' || Regex[i] == '.') && Regex[i - 1] != '\\') {
+			if (Regex[i + 1] == '*' || Regex[i + 1] == '+' || Regex[i + 1] == '\?' || Regex[i + 1] == '.') {
 				return false;
 			}		
 		}
