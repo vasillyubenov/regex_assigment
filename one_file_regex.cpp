@@ -254,9 +254,8 @@ int main() {
 	do {
 		std::getline(std::cin, Regex);
 	} while (defense(Regex) != true);
-	//std::cout << "The File you want to read from is: ";
-	//std::cin >> FileName;
-	FileName = "message.txt";
+	std::cout << "The File you want to read from is: ";
+	std::cin >> FileName;
 
 	Solution(Regex, FileName);
 
