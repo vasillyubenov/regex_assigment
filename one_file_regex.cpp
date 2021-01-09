@@ -10,6 +10,7 @@ int Size(const std::string &Line)
 	}
 	return counter;
 }
+
 int Min_regex_Size(const std::string &Regex) {
 	int counter = 0;
 	for (int i = 0; i < Size(Regex); i++) {
@@ -33,7 +34,7 @@ int Special_Symbol(const std::string &Regex, char &special) {
 
 //after we know what the multiplying symbol is we want to find what is the maximum amounth of times we have it in the line
 int Max_Amounth(const std::string &Line, const char letter) {
-	int max = 0, tmp;
+	int max = 0, tmp = 0;
 	for (int i = 0; i < Size(Line); i++) {
 		tmp = 0;
 		for (int j = i; j < Size(Line); j++) {
@@ -47,10 +48,12 @@ int Max_Amounth(const std::string &Line, const char letter) {
 
 bool basic_search(const std::string &Line, const std::string &Regex) {
 	bool match = false, start_line = false;
-	for (size_t line_pos = 0; line_pos <= Size(Line) - Min_regex_Size(Regex); line_pos++) {
+	if (Min_regex_Size(Regex) > Size(Line)) return false;
+	for (int line_pos = 0; line_pos <= Size(Line) - Min_regex_Size(Regex); line_pos++) {
 		int curr_line = line_pos;
+		//std::cout << Line[line_pos];
 		match = false;
-		for (size_t curr_reg = 0; curr_reg < Min_regex_Size(Regex); curr_reg++) {
+		for (int curr_reg = 0; curr_reg < Min_regex_Size(Regex); curr_reg++) {
 			switch (Regex[curr_reg]) {
 			case '\\': {
 				if (curr_reg == Size(Regex) - 1) {
@@ -142,7 +145,7 @@ bool defense(const std::string &Regex) {
 		return false;
 	}
 	//if there are two or more consecutive multipliers
-	for (int i = 1; i < Size(Regex); i++) {
+	for (int i = 1; i < Size(Regex) - 1; i++) {
 		if ((Regex[i] == '*' || Regex[i] == '+' || Regex[i] == '\?' || Regex[i] == '.') && Regex[i - 1] != '\\') {
 			if (Regex[i + 1] == '*' || Regex[i + 1] == '+' || Regex[i + 1] == '\?' || Regex[i + 1] == '.') {
 				return false;
@@ -165,7 +168,7 @@ void Solution(std::string Regex, const std::string &FileName) {
 		return;
 	}
 
-	special_pos = Special_Symbol(Regex, multiplier);
+	special_pos = Special_Symbol(Regex, multiplier);//REGEX = asdasdasdad* special_pos = 11 multiplier = *
 
 	//there is no special symbol
 	if (special_pos == 0) {
@@ -177,18 +180,23 @@ void Solution(std::string Regex, const std::string &FileName) {
 		}
 	}
 	else {
-		letter = Regex[special_pos - 1];
+		int start_erase_position = special_pos - 1;
+		letter = Regex[start_erase_position]; //letter = d
 		//eraseing the special symbol and the one whose amouth varies and the one before if if it is an escpaed symbol
 		if (letter == '\\' || letter == '\?' || letter == '+' || letter == '*' || letter == '.' || letter == '^') {
-			Regex.erase(special_pos - 1, 3);
+			start_erase_position -= 1;
+			Regex.erase(start_erase_position, 3);
 		}
+
 		//eraseing the special symbol and the one whose amouth varies
 		else {
-			Regex.erase(special_pos - 1, 2);
+			Regex.erase(start_erase_position, 2); // REGEX = asdasdasda
 		}
 		std::string buffer, tmp_Regex;
+		//std::cout << tmp_Regex<<"\n";
 		while (getline(MyFile, Line)) {
 			tmp_Regex = Regex;
+			//std::cout << tmp_Regex;
 			buffer = "";
 			if (Min_regex_Size(tmp_Regex) <= Size(Line)) {
 				switch (multiplier) {
@@ -196,37 +204,39 @@ void Solution(std::string Regex, const std::string &FileName) {
 					int max = 1;
 					if (Max_Amounth(Line, letter) >= 1) max = 2;//the times we want the loop to be done
 					for (int quantity = 0; quantity < max; quantity++) {
-						tmp_Regex.insert(special_pos - 1, buffer);
+						tmp_Regex.insert(start_erase_position, buffer);
 						if (basic_search(Line, tmp_Regex) == true) {
 							std::cout << Line << "\n";
 							break;
 						}
 						buffer += letter;
 					}
+					if (tmp_Regex == "") std::cout << Line << "\n";
 					break;
 				}
 				case '*': {
 					int max = Max_Amounth(Line, letter);
 					for (int quantity = 0; quantity <= max; quantity++) {
-						tmp_Regex.insert(special_pos - 1, buffer);
+						tmp_Regex.insert(start_erase_position, buffer);
+						//std::cout << tmp_Regex;
 						if (basic_search(Line, tmp_Regex) == true) {
 							std::cout << Line << "\n";
 							break;
 						}
 						buffer += letter;
 					}
+					if (tmp_Regex == "") std::cout << Line << "\n";
 					break;
 				}
 				case '+': {
 					buffer += letter;
 					int max = Max_Amounth(Line, letter);
 					for (int quantity = 1; quantity <= max; quantity++) {
-						tmp_Regex.insert(special_pos - 1, buffer);
+						tmp_Regex.insert(start_erase_position, buffer);
 						if (basic_search(Line, tmp_Regex) == true) {
 							std::cout << Line << "\n";
 							break;
 						}
-						buffer += letter;
 					}
 					break;
 				}
@@ -244,8 +254,9 @@ int main() {
 	do {
 		std::getline(std::cin, Regex);
 	} while (defense(Regex) != true);
-	std::cout << "The File you want to read from is: ";
-	std::cin >> FileName;
+	//std::cout << "The File you want to read from is: ";
+	//std::cin >> FileName;
+	FileName = "message.txt";
 
 	Solution(Regex, FileName);
 
