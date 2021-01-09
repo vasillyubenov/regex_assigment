@@ -31,7 +31,7 @@ int Special_Symbol(const std::string &Regex, char &special) {
 
 //after we know what the multiplying symbol is we want to find what is the maximum amounth of times we have it in the line
 int Max_Amounth(const std::string &Line, const char letter) {
-	int max = 0, tmp;
+	int max = 0, tmp = 0;
 	for (int i = 0; i < Size(Line); i++) {
 		tmp = 0;
 		for (int j = i; j < Size(Line); j++) {
@@ -169,8 +169,7 @@ void Solution(std::string Regex, const std::string &FileName) {
 
 	//there is no special symbol
 	if (special_pos == 0) {
-		while (getline(MyFile, Line))
-		{
+		while (getline(MyFile, Line)) {
 			if (Min_regex_Size(Regex) <= Size(Line) && basic_search(Line, Regex) == true) {
 				std::cout << Line << "\n";
 			}
