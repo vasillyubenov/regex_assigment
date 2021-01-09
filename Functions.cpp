@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-#include <fstream>
 #include "Functions.h"
 
 int Size(const std::string &Line)
